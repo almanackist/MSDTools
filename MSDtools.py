@@ -65,7 +65,7 @@ def artist_songcount_list(artist):
 	finally:
 		return songcount_list
 
-		
+# for an artist (string), return a list of [artist, song count, album count] and save to csv		
 def artistlist_songcount(artist_list,file_path):
 	import csv
 	songcount_list = []
@@ -99,7 +99,7 @@ def MSD_sample_dirlist(path):
 			dirdata.append([fname, GETTERS.get_artist_name(h5),GETTERS.get_title(h5)])
 	return dirdata
 
-
+# get list of filenames, artist, song title for all h5 files in an MSD sample directory and save to csv
 def MSD_sample_dirlist_save(path,file_path):
 	import csv
 	dirpath = path
