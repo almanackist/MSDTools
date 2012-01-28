@@ -35,6 +35,13 @@ def artist_songlist(artist):
 	for i in songs:
 		print i[0],"\t",i[1],"."*(50-len(i[1])),i[2]
 
+# for an album release (string), display all song_ids with artist name, titles	    
+def release_songlist(release):
+	q = conn.execute("select song_id, artist_name, title from songs where release='"+release+"' order by release")
+	songs = q.fetchall()
+	for i in songs:
+		print i[0],"\t",i[1],"."*(20-len(i[1])),i[2]
+
 # for an artist (string), display total counts for songs and unique albums 
 def artist_songcount_print(artist):
 	q = conn.execute("select song_id, release from songs where artist_name='"+artist+"' order by release")
@@ -97,7 +104,8 @@ def MSD_sample_dirlist(path):
 	for fname in dirlist:
 			h5 = GETTERS.open_h5_file_read(dirpath+fname)
 			dirdata.append([fname, GETTERS.get_artist_name(h5),GETTERS.get_title(h5)])
-	return dirdata
+                        h5.close()
+        return dirdata
 
 # get list of filenames, artist, song title for all h5 files in an MSD sample directory and save to csv
 def MSD_sample_dirlist_save(path,file_path):
@@ -108,6 +116,7 @@ def MSD_sample_dirlist_save(path,file_path):
 	for fname in dirlist:
 			h5 = GETTERS.open_h5_file_read(dirpath+fname)
 			dirdata.append([dirpath, fname, GETTERS.get_artist_name(h5),GETTERS.get_title(h5)])
+                        h5.close()
 	listwriter = csv.writer(open(file_path,'a'), delimiter=',',quotechar='|',quoting=csv.QUOTE_MINIMAL)
 	listwriter.writerows(dirdata)
 	return dirdata
