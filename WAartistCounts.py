@@ -20,7 +20,6 @@ WAartists = csv.reader(open('/Users/alanj/Desktop/WAartists.csv'))
 songcount_list = []
 
 def artistlist_songcount(artist_list,file_path):
-    import csv
     songcount_list = []
     for name in artist_list:
         artist_songcount = [] 
