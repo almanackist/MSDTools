@@ -15,41 +15,53 @@ import hdf5_getters as GETTERS
 
 conn = sqlite3.connect(os.path.join(sql_code_path,'Tasks_Demos/SQLite/track_metadata.db'))
 
-# display schema for a single table
 def get_schema(table):
+    """
+    display schema for a single table
+    """
     q = conn.execute("PRAGMA table_info(["+table+"])")
     schema = q.fetchall()
     for i in schema:
         print i[0],"\t",i[1]
 
-# for an MSD song_id, identify a song
 def song_id_identify(songid):
+    """
+    for an MSD song_id, identify a song
+    """
     q = conn.execute("select artist_name, title, release from songs where song_id='"+songid+"'")
     songs = q.fetchall()
     print songs
 
-# get info for a song name
 def song_name_identify(songname):
+    """
+    get info for a song name
+    """
     q = conn.execute("select song_id, artist_name, title, release from songs where title='"+songname+"'")
     songs = q.fetchall()
     print songs
 
-# for an artist (string), display all song_ids with titles and album (release) names        
 def artist_songlist(artist):
+    """
+    for an artist (string), display all song_ids with titles and album (release) names        
+    """
     q = conn.execute("select song_id, title, release from songs where artist_name='"+artist+"' order by release")
     songs = q.fetchall()
     for i in songs:
         print i[0],"\t",i[1],"."*(50-len(i[1])),i[2]
 
-# for an album release (string), display all song_ids with artist name, titles      
 def release_songlist(release):
+    """
+    for an album release (string), display all song_ids with artist name, titles      
+    """
     q = conn.execute("select song_id, artist_name, title from songs where release='"+release+"' order by release")
     songs = q.fetchall()
     for i in songs:
         print i[0],"\t",i[1],"."*(20-len(i[1])),i[2]
 
-# for an artist (string), display total counts for songs and unique albums 
 def artist_songcount_print(artist):
+    """
+    for an artist (string), display total counts for songs and unique albums 
+    """
     q = conn.execute("select song_id, release from songs where artist_name='"+artist+"' order by release")
     songs = q.fetchall()
     print artist, "."*(30-len(artist)),
@@ -60,8 +72,10 @@ def artist_songcount_print(artist):
     except IndexError:
         print "None"
 
-# for an artist (string), return a list of [artist, song count, album count]
 def artist_songcount_list(artist):
+    """
+    for an artist (string), return a list of [artist, song count, album count]
+    """
     songcount_list = []
     try:
         q = conn.execute("select song_id, release from songs where artist_name='"+artist+"' order by release")
@@ -78,8 +92,11 @@ def artist_songcount_list(artist):
     finally:
         return songcount_list
 
-# for an artist (string), return a list of [artist, song count, album count] and save to csv        
 def artistlist_songcount(artist_list,file_path):
+    """
+    for an artist (string), return a list of [artist, song count, album count]
+    and save to csv
+    """        
     import csv
     songcount_list = []
     for name in artist_list:
@@ -102,8 +119,10 @@ def artistlist_songcount(artist_list,file_path):
     songwriter.writerows(songcount_list)
     return songcount_list
 
-# get list of filenames, artist, song title for all h5 files in an MSD sample directory
 def MSD_sample_dirlist(path):
+    """
+    get list of filenames, artist, song title for all h5 files in an MSD sample directory
+    """
     dirpath = path
     dirlist = os.listdir(path)
     dirdata = []
@@ -114,6 +133,9 @@ def MSD_sample_dirlist(path):
     return dirdata
 
 def better_MSD_sample_dirslist(paths):
+    """
+    get list of filenames, artist, song title for all h5 files in a list of MSD sample directories
+    """
     dirdata = []
     for path in paths:
         dirlist = os.listdir(path)
@@ -122,8 +144,10 @@ def better_MSD_sample_dirslist(paths):
                 dirdata.append([fname, GETTERS.get_artist_name(h5),GETTERS.get_title(h5)])
     return dirdata
 
-# get list of filenames, artist, song title for all h5 files in an MSD sample directory and save to csv
 def MSD_sample_dirlist_save(path,file_path):
+    """
+    get list of filenames, artist, song title for all h5 files in an MSD sample directory and save to csv
+    """
     import csv
     dirpath = path
     dirlist = os.listdir(path)
